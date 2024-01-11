@@ -38,9 +38,9 @@ pipeline {
         stage('Open the compose file') {
             steps {
                 script {
-                    dir("${WORKSPACE}/docker-compose/jenkins") {
+                    dir("${WORKSPACE}/docker-compose") {
                         sh """
-                            cat docker-compose.yaml
+                            cat docker-compose.yml
                         """
                     }
                 }
@@ -49,16 +49,16 @@ pipeline {
         // stage('Set variables') {
         //     steps {
         //         script {
-        //             dir("${WORKSPACE}/docker-compose/jenkins") {
+        //             dir("${WORKSPACE}/docker-compose") {
         //                 settingUpVariable()
         //             }
         //         }
         //     }
         // }
-        stage('Set variables') {
+        stage('credentials') {
             steps {
                 script {
-                     dir("${WORKSPACE}/docker-compose/jenkins") {
+                     dir("${WORKSPACE}/docker-compose") {
                         withCredentials([
                         usernamePassword(credentialsId: 'weather-app-redis-cred', 
                         usernameVariable: 'REDIS_USERNAME', 
@@ -81,7 +81,7 @@ pipeline {
         stage('Pull Images') {
             steps {
                 script {
-                    dir("${WORKSPACE}/docker-compose/jenkins") {
+                    dir("${WORKSPACE}/docker-compose") {
                         pullImages()
                     }
                 }
@@ -111,11 +111,11 @@ def settingUpVariable() {
 
 def pullImages() {
     sh """
-    sudo docker pull devopseasylearning/sixfure-db:${params.DB_IMAGE_VERSION}
-    sudo docker pull devopseasylearning/sixfure-redis:${params.REDIS_IMAGE_VERSION}
-    sudo docker pull devopseasylearning/sixfure-ui:${params.UI_IMAGE_VERSION}
-    sudo docker pull devopseasylearning/sixfure-weather:${params.WEATHER_IMAGE_VERSION}
-    sudo docker pull devopseasylearning/sixfure-auth:${params.AUTH_IMAGE_VERSION}
+    sudo docker pull edennolan2021/db:${params.DB_IMAGE_VERSION}
+    sudo docker pull edennolan2021/redis:${params.REDIS_IMAGE_VERSION}
+    sudo docker pull edennolan2021/ui:${params.UI_IMAGE_VERSION}
+    sudo docker pull edennolan2021/weather:${params.WEATHER_IMAGE_VERSION}
+    sudo docker pull edennolan2021/auth:${params.AUTH_IMAGE_VERSION}
     sudo docker images
     sudo docker-compose down
     sudo docker-compose up -d
@@ -124,10 +124,4 @@ def pullImages() {
     """
 }
 
-// sed -i "s|DB_IMAGE_VERSION|develop|g" docker-compose.yaml
-// sed -i "s|REDIS_IMAGE_VERSION|develop|g" docker-compose.yaml
-// sed -i "s|UI_IMAGE_VERSION|develop|g" docker-compose.yaml
-// sed -i "s|WEATHER_IMAGE_VERSION|develop|g" docker-compose.yaml
-// sed -i "s|AUTH_IMAGE_VERSION|develop|g" docker-compose.yaml
 
-// cat docker-compose.yaml
