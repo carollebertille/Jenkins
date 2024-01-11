@@ -1,22 +1,40 @@
 pipeline {
     agent any
-
+    options {
+        // Global options go here
+    }
+    environments {
+        // Environment-specific configurations go here
+    }
+    parameters {
+        // Parameters definition goes here
+    }
+    
     stages {
-        stage('Checkout') {
+        stage('Build') {
             steps {
-                git branch: 'main', url: 'https://github.com/carollebertille/infras.git'
+                // Build steps go here
+                // For example: sh 'mvn clean install'
             }
         }
-        stage('Terraform init') {
-            steps {
-                sh 'terraform init'
-            }
+        // Add more stages as needed
+    }
+    
+    post {
+        // always {
+        //     // Actions to run regardless of success or failure
+        //     // For example, you can archive artifacts here
+        //     echo 'Pipeline succeeded!'
+        // }
+        success {
+            // Actions to run when the pipeline succeeds
+            // For example, you can send a notification here
+            echo 'Pipeline succeeded!'
         }
-        stage('Terraform plan') {
-            steps {
-                sh 'terraform plan'
-            }
+        failure {
+            // Actions to run when the pipeline fails
+            // For example, you can send a notification here
+            echo 'Pipeline failed!'
         }
-        
     }
 }
