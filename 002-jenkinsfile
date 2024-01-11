@@ -59,6 +59,14 @@ pipeline {
                 """
             }
         }
+         stage('Scanning the image') {
+            steps {
+                sh """
+                    echo "Scanning the image. Please wait ....................."
+                    sleep 5
+                """
+            }
+        }
         stage('Pushing into Dockerhub') {
             steps {
                 sh """
@@ -83,26 +91,8 @@ pipeline {
                 """
             }
         }
-        stage('List contents') {
-            steps {
-                sh """
-                    echo "List contents. Please wait ....................."
-                    ls -l
-                    pwd
-                    cd scripts
-                    cat jenkins-master.sh
-                """
-            }
-        }
-        stage('End Job') {
-            steps {
-                sh """
-                    echo "List contents. Please wait ....................."
-                    ls -l
-                    pwd
-                """
-            }
-        }
+    
+       
     }
     post {
         success {
